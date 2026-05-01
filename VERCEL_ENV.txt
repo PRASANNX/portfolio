@@ -1,0 +1,35 @@
+# ============================================
+# PRX STARTUP OS: Vercel Production Environment
+# ============================================
+
+# Supabase (Settings > API)
+NEXT_PUBLIC_SUPABASE_URL=https://jevoxcyrsozabijdlvtc.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_87aAen3h675AJj65qxX_8w_mTz_UpKG
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
+
+# Razorpay (India Payments)
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+RAZORPAY_WEBHOOK_SECRET=your_webhook_secret_for_signature_verification
+
+# WhatsApp (Meta Cloud API)
+WHATSAPP_TOKEN=your_meta_system_user_token
+WHATSAPP_PHONE_ID=your_whatsapp_phone_number_id
+WHATSAPP_BUSINESS_ID=your_whatsapp_business_account_id
+
+# Email (Resend)
+RESEND_API_KEY=re_your_api_key
+
+# Analytics (PostHog)
+NEXT_PUBLIC_POSTHOG_KEY=phc_your_key
+NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
+
+# SEO & URLs
+NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
+NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
+
+# Platform Admin (God Mode)
+ROOT_ADMIN_EMAIL=your-email@example.com
+
+# Deployment Configuration
+NODE_ENV=production
