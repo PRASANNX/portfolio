@@ -40,7 +40,7 @@ export async function updateSession(request: NextRequest) {
 
   // Protected routes - redirect to login if not authenticated
   const isAuthRoute = request.nextUrl.pathname.startsWith("/login") ||
-                      request.nextUrl.pathname.startsWith("/signup");
+                      request.nextUrl.pathname.startsWith("/register");
   const isPublicRoute = request.nextUrl.pathname.startsWith("/api/webhooks") ||
                         request.nextUrl.pathname === "/" ||
                         request.nextUrl.pathname.startsWith("/_next") ||

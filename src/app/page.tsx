@@ -34,7 +34,7 @@ export default function HomePage() {
             <Link href="/login">
               <Button variant="ghost">Login</Button>
             </Link>
-            <Link href="/signup">
+            <Link href="/register">
               <Button>Get Started</Button>
             </Link>
           </nav>
@@ -53,7 +53,7 @@ export default function HomePage() {
             Built with Next.js, Supabase, and Razorpay.
           </p>
           <div className="mt-10 flex items-center justify-center gap-4">
-            <Link href="/signup">
+            <Link href="/register">
               <Button size="lg">Start Building Free</Button>
             </Link>
             <Link href="https://github.com" target="_blank">
@@ -95,7 +95,7 @@ export default function HomePage() {
           <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
             Stop reinventing the wheel. Clone this boilerplate, customize it for your industry, and launch.
           </p>
-          <Link href="/signup">
+          <Link href="/register">
             <Button size="lg">Get Started Today</Button>
           </Link>
         </div>

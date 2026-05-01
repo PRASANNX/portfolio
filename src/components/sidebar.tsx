@@ -93,7 +93,10 @@ export function Sidebar({ navItems = defaultNavItems, className }: SidebarProps)
 
       {/* Create New Button */}
       <div className="p-4 border-t">
-        <button className="flex items-center gap-2 w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+        <button 
+          className="flex items-center gap-2 w-full px-4 py-2 text-white rounded-lg transition-colors hover:opacity-90"
+          style={{ backgroundColor: '#FF5F1F' }}
+        >
           <Plus className="h-4 w-4" />
           <span className="text-sm font-medium">New Project</span>
         </button>

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import { useAuth } from "./auth-provider";
+import { useAuth } from "./auth/auth-provider";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -11,14 +11,14 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (!isLoading && !user) {
       router.push("/login");
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [user, isLoading, router]);
 
   // Show loading state
   if (isLoading) {
@@ -33,7 +33,7 @@ export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
   }
 
   // Show fallback or children if authenticated
-  if (!isAuthenticated) {
+  if (!user) {
     return fallback || null;
   }
 
