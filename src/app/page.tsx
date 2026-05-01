@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/shared/logo";
-import { SEO_CONFIG } from "@/lib/seo/config";
+import { SEO_CONFIG } from "@/lib/config";
 
 const features = [
   {

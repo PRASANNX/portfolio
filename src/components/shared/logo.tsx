@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SEO_CONFIG } from "@/lib/seo/config";
+import { SEO_CONFIG } from "@/lib/config";
 
 interface LogoProps {
   className?: string;
