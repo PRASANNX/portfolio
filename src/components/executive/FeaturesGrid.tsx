@@ -19,7 +19,7 @@ interface FeaturesGridProps {
 
 export function FeaturesGrid({ title, features }: FeaturesGridProps) {
   return (
-    <section className="section">
+    <section id="features" className="section">
       <div className="section-inner">
         <h2
           className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-black text-center mb-12 lg:mb-16"
@@ -27,26 +27,26 @@ export function FeaturesGrid({ title, features }: FeaturesGridProps) {
         >
           {title}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {features.map((feature, i) => {
             const Icon = iconMap[feature.icon] || Zap;
             return (
               <div
                 key={i}
-                className={`py-8 ${i < features.length - 1 ? "border-b border-gray-200 md:border-b-0" : ""}`}
+                className="border border-gray-200 rounded-lg p-6 hover:border-gray-300 transition-colors duration-150"
               >
                 <Icon
-                  className="w-6 h-6 mb-4"
+                  className="w-5 h-5 mb-4"
                   style={{ color: "var(--accent)" }}
                   strokeWidth={2}
                 />
                 <h3
-                  className="text-lg font-bold text-black mb-2"
-                  style={{ fontFamily: "Montserrat, sans-serif" }}
+                  className="text-base font-bold text-black mb-2"
+                  style={{ fontFamily: "Montserrat, sans-serif", letterSpacing: "-0.02em" }}
                 >
                   {feature.title}
                 </h3>
-                <p className="body text-gray-600">{feature.description}</p>
+                <p className="body text-gray-600 text-sm leading-relaxed">{feature.description}</p>
               </div>
             );
           })}
