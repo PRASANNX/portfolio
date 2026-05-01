@@ -1,16 +1,17 @@
 /**
- * TypeScript Types for The Engine
+ * PRX Startup OS — TypeScript Types
+ * Updated schema: org_memberships (not organization_members), no subscriptions table
  */
-import type { Json } from "@supabase/supabase-js";
 
 // ============================================
-// Database Types (match Supabase schema)
+// Database Types (match current Supabase schema)
 // ============================================
 
 export interface Profile {
   id: string;
   email: string;
   full_name: string | null;
+  phone: string | null;
   avatar_url: string | null;
   created_at: string;
   updated_at: string;
@@ -20,50 +21,47 @@ export interface Organization {
   id: string;
   name: string;
   slug: string;
-  plan: PlanKey;
+  accent_color: string;
+  logo_url: string | null;
+  is_active: boolean;
+  billing_tier: BillingTier;
+  created_by: string;
   created_at: string;
   updated_at: string;
 }
 
-export interface OrganizationMember {
+export interface OrgMembership {
   id: string;
-  organization_id: string;
+  org_id: string;
   user_id: string;
-  role: RoleKey;
+  role: UserRole;
+  status: MembershipStatus;
+  invited_by: string | null;
   created_at: string;
   // Joined fields
   profile?: Profile;
   organization?: Organization;
 }
 
-export interface Subscription {
+export interface WaitlistEntry {
   id: string;
-  organization_id: string;
-  razorpay_subscription_id: string | null;
-  razorpay_customer_id: string | null;
-  plan: PlanKey;
-  status: SubscriptionStatus;
-  current_period_start: string | null;
-  current_period_end: string | null;
-  cancel_at_period_end: boolean;
+  org_id: string;
+  email: string;
+  name: string | null;
+  source: string;
+  status: WaitlistStatus;
+  metadata: Record<string, unknown>;
   created_at: string;
-  updated_at: string;
 }
 
 // ============================================
-// Enums and Constants
+// Enums / Literal Types
 // ============================================
 
-export type PlanKey = "free" | "starter" | "pro" | "enterprise";
-
-export type RoleKey = "owner" | "admin" | "member";
-
-export type SubscriptionStatus =
-  | "trialing"
-  | "active"
-  | "past_due"
-  | "canceled"
-  | "paused";
+export type UserRole = "owner" | "admin" | "staff" | "client";
+export type MembershipStatus = "active" | "pending" | "suspended";
+export type WaitlistStatus = "pending" | "contacted" | "converted" | "rejected";
+export type BillingTier = "free" | "starter" | "professional" | "enterprise";
 
 // ============================================
 // API Types
@@ -75,61 +73,6 @@ export interface ApiResponse<T = unknown> {
   error?: string;
 }
 
-export interface RazorpayCheckoutRequest {
-  plan: PlanKey;
-  organizationId: string;
-  successUrl: string;
-  cancelUrl: string;
-}
-
-export interface RazorpayCheckoutResponse {
-  sessionId: string;
-  paymentUrl: string;
-}
-
-export interface RazorpayWebhookPayload {
-  event: string;
-  payload: {
-    subscription?: {
-      entity: {
-        id: string;
-        status: string;
-        current_period_start: number;
-        current_period_end: number;
-        plan_id: string;
-      };
-    };
-    invoice?: {
-      entity: {
-        id: string;
-        subscription_id: string;
-        amount_paid: number;
-        status: string;
-      };
-    };
-  };
-}
-
-// ============================================
-// Context Types
-// ============================================
-
-export interface AuthContextType {
-  user: Profile | null;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  signOut: () => Promise<void>;
-  refreshUser: () => Promise<void>;
-}
-
-export interface SubscriptionContextType {
-  subscription: Subscription | null;
-  isLoading: boolean;
-  isActive: boolean;
-  plan: PlanKey;
-  refreshSubscription: () => Promise<void>;
-}
-
 // ============================================
 // Component Props Types
 // ============================================
@@ -137,7 +80,6 @@ export interface SubscriptionContextType {
 export interface DashboardNavItem {
   title: string;
   href: string;
-  icon?: React.ComponentType<{ className?: string }>;
   badge?: string;
   children?: DashboardNavItem[];
 }
@@ -148,6 +90,7 @@ export interface DashboardNavItem {
 
 export interface LayoutParams {
   params: Promise<{
+    orgSlug?: string;
     slug?: string;
     id?: string;
   }>;

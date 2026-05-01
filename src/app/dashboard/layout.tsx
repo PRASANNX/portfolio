@@ -1,5 +1,6 @@
 import { DashboardShell } from "@/components/shell";
 import { ProtectedRoute } from "@/components/protected-route";
+import { OrgProvider } from "@/components/org-provider";
 
 export default function DashboardLayout({
   children,
@@ -8,7 +9,9 @@ export default function DashboardLayout({
 }) {
   return (
     <ProtectedRoute>
-      <DashboardShell>{children}</DashboardShell>
+      <OrgProvider>
+        <DashboardShell>{children}</DashboardShell>
+      </OrgProvider>
     </ProtectedRoute>
   );
 }

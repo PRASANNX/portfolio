@@ -1,112 +1,50 @@
 import Razorpay from "razorpay";
-import { PLANS, type PlanKey } from "@/lib/constants";
+import crypto from "crypto";
 
 /**
- * Razorpay instance
+ * PRX Startup OS — Razorpay Integration
+ * Order-based payment flow (not subscription-based)
+ * Supports UPI, Cards, Net Banking for Indian market
  */
+
 export const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
+  key_id: process.env.RAZORPAY_KEY_ID || "",
+  key_secret: process.env.RAZORPAY_KEY_SECRET || "",
 });
 
 /**
- * Map plan keys to Razorpay plan IDs
+ * Create a Razorpay Order (one-time payment)
  */
-export function getPlanId(plan: PlanKey): string {
-  const planConfig = PLANS[plan];
-  if (!planConfig?.priceId) {
-    throw new Error(`Plan ${plan} does not have a Razorpay plan ID`);
-  }
-  return planConfig.priceId;
+export async function createOrder(params: {
+  amount: number; // in paise (e.g., 49900 = ₹499)
+  currency?: string;
+  receipt: string;
+  notes?: Record<string, string>;
+}) {
+  const order = await razorpay.orders.create({
+    amount: params.amount,
+    currency: params.currency || "INR",
+    receipt: params.receipt,
+    notes: params.notes || {},
+  });
+  return order;
 }
 
 /**
- * Get plan details from Razorpay
+ * Verify Razorpay payment signature (HMAC SHA256)
  */
-export async function getPlanDetails(planId: string) {
-  try {
-    const plan = await razorpay.plans.fetch(planId);
-    return plan;
-  } catch (error) {
-    console.error("Error fetching plan:", error);
-    throw error;
-  }
-}
+export function verifyPaymentSignature(params: {
+  orderId: string;
+  paymentId: string;
+  signature: string;
+}): boolean {
+  const body = `${params.orderId}|${params.paymentId}`;
+  const expectedSignature = crypto
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET || "")
+    .update(body)
+    .digest("hex");
 
-/**
- * Create a customer in Razorpay
- */
-export async function createCustomer(email: string, name: string, orgId: string) {
-  try {
-    const customer = await razorpay.customers.create({
-      email,
-      name,
-      metadata: {
-        organization_id: orgId,
-      },
-    });
-    return customer;
-  } catch (error) {
-    console.error("Error creating customer:", error);
-    throw error;
-  }
-}
-
-/**
- * Create a subscription
- */
-export async function createSubscription(
-  planId: string,
-  customerId: string,
-  organizationId: string
-) {
-  try {
-    const subscription = await razorpay.subscriptions.create({
-      plan_id: planId,
-      customer_id: customerId,
-      customer_notify: 1,
-      notify_info: {
-        notify_email: 1,
-      },
-      addons: [],
-      metadata: {
-        organization_id: organizationId,
-      },
-    });
-    return subscription;
-  } catch (error) {
-    console.error("Error creating subscription:", error);
-    throw error;
-  }
-}
-
-/**
- * Create checkout URL for payment
- */
-export async function createCheckoutSession(
-  customerId: string,
-  subscriptionId: string
-) {
-  try {
-    // Get subscription details
-    const subscription = await razorpay.subscriptions.fetch(subscriptionId);
-    
-    // Create an invoice and get checkout URL
-    const invoice = await razorpay.invoices.create({
-      type: "subscription",
-      subscription_id: subscriptionId,
-      customer_id: customerId,
-    });
-
-    return {
-      invoiceId: invoice.id,
-      checkoutUrl: invoice.short_url,
-      amount: subscription.amount,
-    };
-  } catch (error) {
-    console.error("Error creating checkout:", error);
-    throw error;
-  }
+  return expectedSignature === params.signature;
 }
 
 /**
@@ -117,39 +55,44 @@ export function verifyWebhookSignature(
   signature: string,
   secret: string
 ): boolean {
-  const crypto = require("crypto");
   const expectedSignature = crypto
     .createHmac("sha256", secret)
     .update(payload)
     .digest("hex");
-  
+
   return signature === expectedSignature;
 }
 
 /**
- * Handle webhook events
+ * Webhook event types for Razorpay
  */
 export type WebhookEventType =
-  | "subscription.activated"
-  | "subscription.ancelled"
-  | "subscription.paused"
-  | "subscription.pending"
-  | "invoice.paid"
-  | "invoice.payment_failed";
+  | "payment.authorized"
+  | "payment.captured"
+  | "payment.failed"
+  | "order.paid"
+  | "refund.processed";
 
 export interface WebhookEventData {
-  subscription?: {
-    id: string;
-    status: string;
-    customer_id: string;
-    plan_id: string;
-    current_period_start: number;
-    current_period_end: number;
+  payment?: {
+    entity: {
+      id: string;
+      order_id: string;
+      amount: number;
+      currency: string;
+      status: string;
+      method: string;
+      email: string;
+      contact: string;
+    };
   };
-  invoice?: {
-    id: string;
-    subscription_id: string;
-    amount_paid: number;
-    status: string;
+  order?: {
+    entity: {
+      id: string;
+      amount: number;
+      amount_paid: number;
+      status: string;
+      receipt: string;
+    };
   };
 }
