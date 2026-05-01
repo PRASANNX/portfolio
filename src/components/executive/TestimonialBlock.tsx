@@ -16,8 +16,8 @@ export function TestimonialBlock({ title, testimonials }: TestimonialBlockProps)
       <div className="section-inner">
         {title && (
           <h2
-            className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-black text-center mb-12"
-            style={{ fontFamily: "Montserrat, sans-serif" }}
+            className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-black text-center mb-12"
+            style={{ fontFamily: "Montserrat, sans-serif", letterSpacing: "-0.03em" }}
           >
             {title}
           </h2>

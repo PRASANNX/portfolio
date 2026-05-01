@@ -98,9 +98,9 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.1;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
   }
 
   /* Remove default focus outlines, use brand ring */

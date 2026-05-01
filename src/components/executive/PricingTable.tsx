@@ -22,8 +22,8 @@ export function PricingTable({ title, tiers }: PricingTableProps) {
       <div className="section-inner">
         {title && (
           <h2
-            className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-black text-center mb-12"
-            style={{ fontFamily: "Montserrat, sans-serif" }}
+            className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-black text-center mb-12"
+            style={{ fontFamily: "Montserrat, sans-serif", letterSpacing: "-0.03em" }}
           >
             {title}
           </h2>
@@ -56,9 +56,11 @@ export function PricingTable({ title, tiers }: PricingTableProps) {
                 >
                   {tier.currency || "₹"}{tier.price}
                 </span>
-                <span className="text-sm text-gray-500 ml-1">
-                  /{tier.period || "mo"}
-                </span>
+                {tier.period && (
+                  <span className="text-sm text-gray-500 ml-2">
+                    {tier.period}
+                  </span>
+                )}
               </div>
               <p className="body text-gray-500 mb-6">{tier.description}</p>
 

@@ -14,10 +14,10 @@ export default function HomePage() {
       <main>
         {/* Hero Section */}
         <HeroSection
-          headline="The OS for Executive-Grade Startups"
-          subheadline="Stop building infrastructure. Start building your business. The all-in-one platform to spawn, digitize, and scale your startup in India."
-          cta_text="Build Your Startup"
-          cta_secondary_text="View Demo"
+          headline="ShipFast is $199 and doesn't support UPI. We fixed that."
+          subheadline="Indian founders waste weeks stitching Stripe alternatives, fighting GST compliance, and paying in USD for tools that don't work here. PRX Startup OS is the production-ready platform built exclusively for India — Razorpay, UPI, GST invoicing, WhatsApp, all baked in. One purchase. Ship this week."
+          cta_text="Get PRX OS — ₹4,999"
+          cta_secondary_text="See What's Included"
         />
 
         {/* Features Section */}
@@ -84,33 +84,39 @@ export default function HomePage() {
 
         {/* Pricing Section */}
         <PricingTable
-          title="Built for Every Stage"
+          title="One Price. Lifetime Access. No Subscriptions."
           tiers={[
             {
               name: "Starter",
-              price: "0",
-              description: "Perfect for testing new ideas.",
+              price: "4,999",
+              period: "one-time",
+              description: "Everything you need to validate and launch.",
               features: [
-                "1 Organization",
-                "Waitlist Capture",
-                "Standard Components",
-                "Public Landing Page",
+                "3 Organizations",
+                "Waitlist + Landing Pages",
+                "Full Executive UI Library",
+                "Razorpay + UPI Payments",
+                "GST Invoicing Engine",
+                "6 Months of Updates",
               ],
-              cta_text: "Get Started",
+              cta_text: "Get Starter",
             },
             {
-              name: "Pro",
-              price: "4,999",
-              description: "For serious founders and service businesses.",
+              name: "Professional",
+              price: "9,999",
+              period: "one-time",
+              description: "For agencies and serial builders.",
               features: [
                 "Unlimited Organizations",
                 "Full Executive UI Library",
                 "Razorpay + UPI Integration",
-                "GST Invoicing",
-                "WhatsApp Notifications",
+                "GST Invoicing + WhatsApp",
+                "Client Portal + Document Vault",
                 "Custom Domains",
+                "Lifetime Updates",
+                "Priority Support",
               ],
-              cta_text: "Buy Pro",
+              cta_text: "Get Professional",
               highlighted: true,
             },
           ]}
