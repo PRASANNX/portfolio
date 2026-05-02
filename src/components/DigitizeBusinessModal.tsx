@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { BUSINESS_CATEGORIES } from "@/lib/templates";
+import { PreFlightSandbox } from "@/components/executive/PreFlightSandbox";
 
 interface DigitizeBusinessModalProps {
   isOpen: boolean;
@@ -39,7 +40,12 @@ export function DigitizeBusinessModal({ isOpen, onClose, orgId }: DigitizeBusine
     console.log({
       orgId, categoryId, businessName, gstin, phone, email, address
     });
-    alert("Business digitization process started.");
+    // Move to Pre-Flight Sandbox step instead of closing immediately
+    setStep(4);
+  };
+
+  const handleDeploy = () => {
+    alert("Deployed to Production!");
     onClose();
   };
 
@@ -50,7 +56,7 @@ export function DigitizeBusinessModal({ isOpen, onClose, orgId }: DigitizeBusine
         <div className="px-8 pt-8 pb-4">
           <div className="flex items-center justify-between mb-1">
             <h2 className="text-xl font-bold text-black" style={{ fontFamily: "Montserrat, sans-serif" }}>
-              Digitize Business (Step {step}/3)
+              Digitize Business (Step {step}/4)
             </h2>
             <button onClick={onClose} className="text-gray-400 hover:text-black">✕</button>
           </div>
@@ -110,19 +116,27 @@ export function DigitizeBusinessModal({ isOpen, onClose, orgId }: DigitizeBusine
               </div>
             </div>
           )}
-        </div>
 
-        <div className="px-8 pb-8 flex items-center justify-between">
-          {step > 1 ? (
-            <button onClick={() => setStep(step - 1)} className="btn-ghost text-sm">Back</button>
-          ) : <div />}
-          
-          {step < 3 ? (
-            <button onClick={handleNext} disabled={step === 1 && !categoryId} className="btn-primary text-sm px-6">Next</button>
-          ) : (
-            <button onClick={handleDigitize} disabled={!businessName} className="btn-primary text-sm px-6">Digitize</button>
+          {step === 4 && (
+            <div className="flex justify-center">
+              <PreFlightSandbox orgId={orgId} onDeploy={handleDeploy} />
+            </div>
           )}
         </div>
+
+        {step < 4 && (
+          <div className="px-8 pb-8 flex items-center justify-between">
+            {step > 1 ? (
+              <button onClick={() => setStep(step - 1)} className="btn-ghost text-sm">Back</button>
+            ) : <div />}
+            
+            {step < 3 ? (
+              <button onClick={handleNext} disabled={step === 1 && !categoryId} className="btn-primary text-sm px-6">Next</button>
+            ) : (
+              <button onClick={handleDigitize} disabled={!businessName} className="btn-primary text-sm px-6">Review & Test</button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

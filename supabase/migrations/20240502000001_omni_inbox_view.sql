@@ -34,13 +34,13 @@ ALTER TABLE public.client_messages ENABLE ROW LEVEL SECURITY;
 
 -- Simple RLS policies based on organization_members
 CREATE POLICY "Users can view org inquiries" ON public.inquiries
-  FOR SELECT USING (org_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()));
+  FOR SELECT USING (org_id IN (SELECT organization_id FROM public.organization_members WHERE user_id = auth.uid()));
 
 CREATE POLICY "Users can view org payments" ON public.payments
-  FOR SELECT USING (org_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()));
+  FOR SELECT USING (org_id IN (SELECT organization_id FROM public.organization_members WHERE user_id = auth.uid()));
 
 CREATE POLICY "Users can view org messages" ON public.client_messages
-  FOR SELECT USING (org_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()));
+  FOR SELECT USING (org_id IN (SELECT organization_id FROM public.organization_members WHERE user_id = auth.uid()));
 
 -- Create the View with security_invoker = true
 CREATE OR REPLACE VIEW public.vw_omni_events WITH (security_invoker = true) AS
