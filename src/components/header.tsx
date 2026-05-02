@@ -91,7 +91,11 @@ export function Header({ title, actions, variant = "landing" }: HeaderProps) {
           {actions}
 
           {user ? (
-            <div className="relative group">
+            <div className="flex items-center gap-3">
+              <Link href="/dashboard" className="btn-secondary text-xs sm:text-sm px-3 py-1.5 hidden sm:inline-flex">
+                Dashboard
+              </Link>
+              <div className="relative group">
               <button
                 className="flex items-center justify-center w-8 h-8 rounded-full bg-black text-white text-xs font-bold transition-opacity hover:opacity-80"
                 style={{ fontFamily: "Montserrat, sans-serif" }}
@@ -122,6 +126,7 @@ export function Header({ title, actions, variant = "landing" }: HeaderProps) {
                 >
                   Sign out
                 </button>
+              </div>
               </div>
             </div>
           ) : (
