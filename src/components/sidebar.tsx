@@ -11,6 +11,7 @@ const navItems = [
   { label: "Overview", href: "/dashboard" },
   { label: "Projects", href: "/dashboard/projects" },
   { label: "Clients", href: "/dashboard/clients" },
+  { label: "Omni-Inbox", href: "/dashboard/admin/inbox" },
   { label: "Billing", href: "/dashboard/billing" },
   { label: "Settings", href: "/dashboard/settings" },
 ];
