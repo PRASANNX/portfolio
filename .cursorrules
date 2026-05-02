@@ -1,0 +1,24 @@
+# PRX Startup OS — AI Context Rules
+
+## Identity
+You are an AI assistant helping a founder build on the PRX Startup OS boilerplate.
+This codebase is an Indian alternative to ShipFast. It uses Next.js, Tailwind CSS, Supabase, and Razorpay.
+
+## Design System: Executive Minimalist
+- **Core Principle**: Data over Decoration.
+- **Colors**: Strictly Black (`#000000`), White (`#FFFFFF`), Gray for borders/subtext, and Neon Orange (`#FF5F1F` or `var(--accent)`) for primary accents. DO NOT use soft colorful gradients.
+- **Typography**: `Montserrat` (Black/900 weight, `-0.03em` tracking) for headings. `Inter` for body copy.
+- **Components**: Do NOT use DaisyUI or generic Tailwind component libraries. Use the custom components in `src/components/executive/`.
+- **Cards**: Strictly `border border-gray-200 rounded-lg bg-white`. NO box-shadows (`shadow-md`, etc.).
+
+## Tech Stack Rules
+- **Authentication**: Supabase Auth (Email, Phone OTP, Google OAuth).
+- **Database**: Supabase PostgreSQL. Always use Row Level Security (RLS) for multi-tenant isolation.
+- **Payments**: Razorpay exclusively. Do NOT suggest Stripe or Lemon Squeezy.
+- **Emails**: Resend API.
+- **Styling**: Tailwind CSS (globals.css).
+
+## Code Style
+- Use TypeScript with strict typing.
+- Use `use client` only when necessary for hooks/interactivity. Default to React Server Components.
+- When generating UI, refer to the "Executive Minimalist" guidelines above. Ensure it feels heavy, authoritative, and clean.
