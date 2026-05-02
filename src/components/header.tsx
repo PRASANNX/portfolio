@@ -45,34 +45,34 @@ export function Header({ title, actions, variant = "landing" }: HeaderProps) {
         {/* Center — Nav links (landing only) */}
         {variant === "landing" && (
           <nav className="hidden md:flex items-center gap-8">
-            <a
-              href="#features"
+            <Link
+              href="/features"
               className="text-sm font-medium text-gray-500 hover:text-black transition-colors"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               Features
-            </a>
-            <a
-              href="#proof"
+            </Link>
+            <Link
+              href="/proof"
               className="text-sm font-medium text-gray-500 hover:text-black transition-colors"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               Proof
-            </a>
-            <a
-              href="#pricing"
+            </Link>
+            <Link
+              href="/pricing"
               className="text-sm font-medium text-gray-500 hover:text-black transition-colors"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               Pricing
-            </a>
-            <a
-              href="#faq"
+            </Link>
+            <Link
+              href="/faq"
               className="text-sm font-medium text-gray-500 hover:text-black transition-colors"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               FAQ
-            </a>
+            </Link>
           </nav>
         )}
 
