@@ -1,0 +1,24 @@
+{
+  "name": "prx-os-cli",
+  "version": "1.0.0",
+  "description": "Magic Deploy CLI for PRX Startup OS",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "prx-os": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "commander": "^11.1.0",
+    "dotenv": "^16.3.1",
+    "execa": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "typescript": "^5.3.3"
+  }
+}
