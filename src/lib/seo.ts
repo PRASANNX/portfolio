@@ -14,7 +14,7 @@ export function generateOrgMetadata(org: {
       title: org.name,
       description: `Join ${org.name} — Early access waitlist`,
       images: [
-        `/api/og?title=${encodeURIComponent(org.name)}&accent=${encodeURIComponent(org.accent_color)}`,
+        `/api/og/executive?title=${encodeURIComponent(org.name)}&accent=${encodeURIComponent(org.accent_color)}&category=BUSINESS`,
       ],
       type: "website" as const,
     },
@@ -35,7 +35,7 @@ export function generatePageMetadata(
       title: page.seo_title || org.name,
       description: page.seo_description || `Join ${org.name}`,
       images: [
-        `/api/og?title=${encodeURIComponent(page.seo_title || org.name)}&accent=${encodeURIComponent(org.accent_color)}`,
+        `/api/og/executive?title=${encodeURIComponent(page.seo_title || org.name)}&accent=${encodeURIComponent(org.accent_color)}&category=PAGE`,
       ],
       type: "website" as const,
     },

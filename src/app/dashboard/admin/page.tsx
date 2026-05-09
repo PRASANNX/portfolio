@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ViralHookGenerator } from "@/components/executive/ViralHookGenerator";
+import { CopywritingCoPilot } from "@/components/dashboard/cms/CopywritingCoPilot";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -109,12 +110,15 @@ export default async function AdminPage() {
         </div>
       </div>
 
-      {/* Viral Hook Generator */}
+      {/* Content Engine */}
       <div className="mt-10">
         <h2 className="text-sm font-bold text-black uppercase tracking-widest mb-4" style={{ fontFamily: "Montserrat, sans-serif" }}>
           Content Engine
         </h2>
-        <ViralHookGenerator />
+        <div className="space-y-6">
+          <ViralHookGenerator />
+          <CopywritingCoPilot onSave={(copy) => console.log('Compiled copy:', copy)} />
+        </div>
       </div>
     </div>
   );
