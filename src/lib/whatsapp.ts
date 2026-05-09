@@ -1,6 +1,7 @@
 /**
  * PRX Startup OS — WhatsApp Integration (Meta Cloud API)
  */
+import { generateWhatsAppMagicLink } from './auth/magic-links';
 
 interface WhatsAppMessagePayload {
   messaging_product: "whatsapp";
@@ -95,4 +96,33 @@ export async function sendWhatsAppTemplate(
   }
 
   return { success: false, error: "Max retries exceeded" };
+}
+
+/**
+ * Sends a WhatsApp notification to a client with a passwordless magic link to view a document.
+ */
+export async function sendDocumentWithMagicLink(
+  toPhone: string,
+  clientId: string,
+  orgId: string,
+  orgSlug: string,
+  documentName: string
+) {
+  // 1. Generate the secure magic link
+  const { url, error } = await generateWhatsAppMagicLink(clientId, orgId, orgSlug);
+  
+  if (error || !url) {
+    console.error("Failed to generate magic link for WhatsApp:", error);
+    return { success: false, error: "Magic link generation failed" };
+  }
+
+  // 2. Send the message via Meta API using a pre-approved template.
+  // Template format: "Your document {{1}} is ready. Tap to view securely: {{2}}"
+  const response = await sendWhatsAppTemplate(
+    toPhone,
+    "document_ready_magic_link", // This template must be approved in Meta Business Manager
+    [documentName, url]
+  );
+
+  return response;
 }

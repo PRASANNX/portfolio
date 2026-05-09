@@ -4,6 +4,8 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useOrg } from "@/components/org-provider";
 import { useRouter } from "next/navigation";
+import { ArchetypeSelector } from "./executive/ArchetypeSelector";
+import { BrandArchetype, ARCHETYPE_MAP } from "@/lib/brand-psychology";
 
 type Step = "info" | "brand" | "confirm";
 
@@ -23,7 +25,7 @@ export function CreateProjectModal({ isOpen, onClose }: CreateProjectModalProps)
   const [projectType, setProjectType] = useState("startup");
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
-  const [accentColor, setAccentColor] = useState("#FF5F1F");
+  const [brandArchetype, setBrandArchetype] = useState<BrandArchetype>("Outlaw");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const supabase = createClient();
@@ -65,17 +67,25 @@ export function CreateProjectModal({ isOpen, onClose }: CreateProjectModalProps)
       const { data: org, error: apiError } = await res.json();
       if (apiError) throw new Error(apiError);
 
-      // 2. Update accent color
+      // 2. Update accent color and archetype
+      const config = ARCHETYPE_MAP[brandArchetype];
       await supabase
         .from("organizations")
-        .update({ accent_color: accentColor })
+        .update({ 
+          accent_color: config.accentColor,
+          brand_archetype: brandArchetype,
+          typography_config: {
+            headingWeight: config.headingWeight,
+            headingTracking: config.headingTracking
+          }
+        })
         .eq("id", org.id);
 
       // 3. Create default landing page via RPC
       await supabase.rpc("create_landing_page", {
         p_org_id: org.id,
         p_org_name: name,
-        p_accent_color: accentColor,
+        p_accent_color: config.accentColor,
       });
 
       // 4. Redirect
@@ -216,50 +226,53 @@ export function CreateProjectModal({ isOpen, onClose }: CreateProjectModalProps)
             <div className="space-y-5">
               <div>
                 <label
-                  className="block text-xs font-semibold text-gray-700 mb-1.5"
+                  className="block text-xs font-semibold text-gray-700 mb-3"
                   style={{ fontFamily: "Montserrat, sans-serif" }}
                 >
-                  Accent Color
+                  Choose Your Brand Archetype
                 </label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="color"
-                    value={accentColor}
-                    onChange={(e) => setAccentColor(e.target.value)}
-                    className="w-12 h-12 rounded-lg border border-gray-200 cursor-pointer p-0.5"
-                  />
-                  <input
-                    type="text"
-                    value={accentColor}
-                    onChange={(e) => setAccentColor(e.target.value)}
-                    className="input w-32 uppercase"
-                    maxLength={7}
-                  />
-                </div>
+                <ArchetypeSelector 
+                  selected={brandArchetype}
+                  onChange={(a) => setBrandArchetype(a)}
+                />
               </div>
 
               {/* Preview */}
-              <div className="border border-gray-200 rounded-lg p-6 text-center">
+              <div 
+                className="border rounded-xl p-6 text-center transition-all duration-300"
+                style={{ 
+                  backgroundColor: ARCHETYPE_MAP[brandArchetype].bgPrimary,
+                  borderColor: ARCHETYPE_MAP[brandArchetype].accentLight,
+                }}
+              >
                 <p
-                  className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4"
-                  style={{ fontFamily: "Montserrat, sans-serif" }}
+                  className="text-xs font-bold uppercase tracking-widest mb-4"
+                  style={{ 
+                    fontFamily: "Montserrat, sans-serif",
+                    color: ARCHETYPE_MAP[brandArchetype].accentColor 
+                  }}
                 >
-                  Preview
+                  Live Preview
                 </p>
                 <p
-                  className="text-2xl font-black text-black mb-4"
-                  style={{ fontFamily: "Montserrat, sans-serif" }}
+                  className="text-2xl mb-4"
+                  style={{ 
+                    fontFamily: "Montserrat, sans-serif",
+                    fontWeight: ARCHETYPE_MAP[brandArchetype].headingWeight,
+                    letterSpacing: ARCHETYPE_MAP[brandArchetype].headingTracking,
+                    color: ARCHETYPE_MAP[brandArchetype].textPrimary
+                  }}
                 >
                   {name || "Project Name"}
                 </p>
                 <button
-                  className="px-6 py-2.5 rounded-lg text-white text-sm font-semibold"
+                  className="px-6 py-2.5 rounded-lg text-white text-sm font-semibold transition-all"
                   style={{
-                    backgroundColor: accentColor,
+                    backgroundColor: ARCHETYPE_MAP[brandArchetype].accentColor,
                     fontFamily: "Montserrat, sans-serif",
                   }}
                 >
-                  Join Waitlist
+                  Get Started
                 </button>
               </div>
             </div>
@@ -284,14 +297,14 @@ export function CreateProjectModal({ isOpen, onClose }: CreateProjectModalProps)
                   </span>
                 </div>
                 <div className="px-4 py-3 flex items-center justify-between">
-                  <span className="text-xs text-gray-500">Accent</span>
+                  <span className="text-xs text-gray-500">Archetype</span>
                   <div className="flex items-center gap-2">
                     <span
                       className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: accentColor }}
+                      style={{ backgroundColor: ARCHETYPE_MAP[brandArchetype].accentColor }}
                     />
-                    <span className="text-sm font-mono text-black">
-                      {accentColor}
+                    <span className="text-sm font-semibold text-black">
+                      {ARCHETYPE_MAP[brandArchetype].name}
                     </span>
                   </div>
                 </div>
