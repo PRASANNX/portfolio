@@ -1,9 +1,26 @@
 "use client";
 
-import { useState } from "react";
-import { PenTool, Eye, Copy, Check } from "lucide-react";
+import { useState, useEffect, useTransition } from "react";
+import {
+  PenTool,
+  Eye,
+  Copy,
+  Check,
+  ChevronDown,
+  Save,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
+import { saveCopilotText, getUserOrgs } from "./actions";
 
 type Framework = "PAS" | "AIDA";
+
+interface Org {
+  id: string;
+  name: string;
+  accent_color: string;
+}
 
 const LABELS: Record<Framework, { a: string; b: string; c: string }> = {
   PAS: { a: "🎯 PROBLEM", b: "🔥 AGITATE", c: "✅ SOLUTION" },
@@ -14,7 +31,7 @@ const PLACEHOLDERS: Record<Framework, { a: string; b: string; c: string }> = {
   PAS: {
     a: "e.g., You're spending weeks setting up boilerplate code...",
     b: "e.g., Meanwhile, your competitors are shipping and your dopamine is dropping...",
-    c: 'e.g., PRX OS gives you Razorpay, Auth, and GST invoices out of the box in 48 hours.',
+    c: "e.g., PRX OS gives you Razorpay, Auth, and GST invoices out of the box in 48 hours.",
   },
   AIDA: {
     a: "e.g., What if you could launch a full SaaS in 48 hours?",
@@ -30,9 +47,31 @@ export default function CopywritingCoPilotPage() {
   const [fieldC, setFieldC] = useState("");
   const [copied, setCopied] = useState(false);
 
+  // ─── Org selector state ──────────────────────────────
+  const [orgs, setOrgs] = useState<Org[]>([]);
+  const [selectedOrgId, setSelectedOrgId] = useState<string>("");
+  const [orgDropdownOpen, setOrgDropdownOpen] = useState(false);
+
+  // ─── Save state ──────────────────────────────────────
+  const [isPending, startTransition] = useTransition();
+  const [saveStatus, setSaveStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  // Fetch orgs on mount
+  useEffect(() => {
+    getUserOrgs().then(({ orgs: fetchedOrgs }) => {
+      setOrgs(fetchedOrgs);
+      if (fetchedOrgs.length > 0) {
+        setSelectedOrgId(fetchedOrgs[0].id);
+      }
+    });
+  }, []);
+
+  const selectedOrg = orgs.find((o) => o.id === selectedOrgId);
   const labels = LABELS[framework];
   const placeholders = PLACEHOLDERS[framework];
-
   const hasContent = fieldA || fieldB || fieldC;
 
   // ─── Build live preview ─────────────────────────────
@@ -86,6 +125,27 @@ Comment "READY" and I'll share the playbook.
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleSave = () => {
+    if (!preview || !selectedOrgId) return;
+    setSaveStatus(null);
+
+    startTransition(async () => {
+      const result = await saveCopilotText(selectedOrgId, preview);
+      if (result.success) {
+        setSaveStatus({
+          type: "success",
+          message: `Saved to ${selectedOrg?.name || "project"} landing page`,
+        });
+        setTimeout(() => setSaveStatus(null), 4000);
+      } else {
+        setSaveStatus({
+          type: "error",
+          message: result.error || "Failed to save",
+        });
+      }
+    });
+  };
+
   return (
     <div className="h-[calc(100vh-8rem)]">
       {/* Page Header */}
@@ -97,22 +157,104 @@ Comment "READY" and I'll share the playbook.
           </h1>
         </div>
 
-        {/* Framework Toggle */}
-        <div className="flex p-0.5 bg-gray-100 rounded-md border border-gray-200">
-          {(["PAS", "AIDA"] as const).map((f) => (
+        <div className="flex items-center gap-3">
+          {/* Framework Toggle */}
+          <div className="flex p-0.5 bg-gray-100 rounded-md border border-gray-200">
+            {(["PAS", "AIDA"] as const).map((f) => (
+              <button
+                key={f}
+                onClick={() => setFramework(f)}
+                className={`
+                  px-4 py-1.5 font-['Montserrat'] text-xs font-bold rounded-md transition-all duration-150
+                  ${framework === f ? "bg-[#121212] text-white" : "text-gray-500 hover:text-black"}
+                `}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+
+          {/* Org Selector */}
+          <div className="relative">
             <button
-              key={f}
-              onClick={() => setFramework(f)}
-              className={`
-                px-4 py-1.5 font-['Montserrat'] text-xs font-bold rounded-md transition-all duration-150
-                ${framework === f ? "bg-[#121212] text-white" : "text-gray-500 hover:text-black"}
-              `}
+              onClick={() => setOrgDropdownOpen((v) => !v)}
+              className="flex items-center gap-2 px-3 py-1.5 border border-gray-200 rounded-md hover:bg-gray-50 transition-colors"
             >
-              {f} Framework
+              {selectedOrg && (
+                <span
+                  className="w-2 h-2 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: selectedOrg.accent_color || "#FF5F1F" }}
+                />
+              )}
+              <span className="font-['Inter'] text-xs font-medium text-black truncate max-w-[120px]">
+                {selectedOrg?.name || "Select Project"}
+              </span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-gray-400 transition-transform ${orgDropdownOpen ? "rotate-180" : ""}`}
+              />
             </button>
-          ))}
+
+            {orgDropdownOpen && (
+              <div className="absolute right-0 top-full mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden z-50">
+                {orgs.length > 0 ? (
+                  orgs.map((org) => (
+                    <button
+                      key={org.id}
+                      onClick={() => {
+                        setSelectedOrgId(org.id);
+                        setOrgDropdownOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-gray-50 transition-colors"
+                    >
+                      <span
+                        className="w-2 h-2 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: org.accent_color }}
+                      />
+                      <span className="font-['Inter'] text-xs font-medium text-black truncate">
+                        {org.name}
+                      </span>
+                      {selectedOrgId === org.id && (
+                        <Check className="w-3 h-3 ml-auto text-[#FF5F1F]" />
+                      )}
+                    </button>
+                  ))
+                ) : (
+                  <div className="px-3 py-3 font-['Inter'] text-xs text-gray-400">
+                    No projects found
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Toast */}
+      {saveStatus && (
+        <div
+          className={`
+            mb-4 flex items-center gap-2 px-4 py-3 rounded-lg border transition-all
+            ${
+              saveStatus.type === "success"
+                ? "bg-emerald-50 border-emerald-200"
+                : "bg-red-50 border-red-200"
+            }
+          `}
+        >
+          {saveStatus.type === "success" ? (
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+          ) : (
+            <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+          )}
+          <p
+            className={`font-['Inter'] text-sm ${
+              saveStatus.type === "success" ? "text-emerald-700" : "text-red-600"
+            }`}
+          >
+            {saveStatus.message}
+          </p>
+        </div>
+      )}
 
       {/* Split Screen */}
       <div className="grid grid-cols-1 lg:grid-cols-2 h-[calc(100%-3rem)] border border-gray-200 rounded-lg overflow-hidden">
@@ -165,6 +307,33 @@ Comment "READY" and I'll share the playbook.
               />
             </div>
           </div>
+
+          {/* Save Button */}
+          <button
+            onClick={handleSave}
+            disabled={!preview || !selectedOrgId || isPending}
+            className={`
+              w-full mt-6 py-3.5 font-['Montserrat'] text-sm font-black rounded-md
+              flex items-center justify-center gap-2 transition-all duration-200
+              ${
+                preview && selectedOrgId && !isPending
+                  ? "bg-[#FF5F1F] hover:bg-[#E54E1A] text-white"
+                  : "bg-white/5 text-gray-600 cursor-not-allowed"
+              }
+            `}
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Saving to Landing Page...
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                Save to {selectedOrg?.name || "Project"} Landing Page
+              </>
+            )}
+          </button>
         </div>
 
         {/* ─── RIGHT: Live Preview (Light) ─────────────── */}
@@ -211,7 +380,11 @@ Comment "READY" and I'll share the playbook.
                   <div className="flex gap-6 font-['Inter'] text-xs text-gray-400">
                     <span>{preview.split(/\s+/).filter(Boolean).length} words</span>
                     <span>{preview.length} chars</span>
-                    <span className={`ml-auto font-bold ${preview.length < 3000 ? "text-emerald-600" : "text-amber-600"}`}>
+                    <span
+                      className={`ml-auto font-bold ${
+                        preview.length < 3000 ? "text-emerald-600" : "text-amber-600"
+                      }`}
+                    >
                       {preview.length < 3000 ? "✓ LinkedIn optimal" : "⚠ Consider trimming"}
                     </span>
                   </div>
