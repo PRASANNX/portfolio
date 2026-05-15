@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Header } from "@/components/header";
-import { HeroSection } from "@/components/executive/HeroSection";
+import { HeroToggle } from "@/components/executive/HeroToggle";
+import { BrandsShowcase } from "@/components/executive/BrandsShowcase";
 import { TrustBar } from "@/components/executive/TrustBar";
-import { FeaturesGrid } from "@/components/executive/FeaturesGrid";
 import { CodePreview } from "@/components/executive/CodePreview";
 import { PricingTable } from "@/components/executive/PricingTable";
 import { FAQAccordion } from "@/components/executive/FAQAccordion";
@@ -12,17 +12,12 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      
-      <main>
-        {/* Section 1: Hero — PAS Framework */}
-        <HeroSection
-          headline="ShipFast is $199 and doesn't support UPI. We fixed that."
-          subheadline="Indian founders waste weeks stitching Stripe alternatives, fighting GST compliance, and paying in USD for tools that don't work here. PRX Startup OS is the production-ready platform built exclusively for India — Razorpay, UPI, GST invoicing, WhatsApp, all baked in. One purchase. Ship this week."
-          cta_text="Get PRX OS — ₹4,999"
-          cta_secondary_text="See What's Included"
-        />
 
-        {/* Section 2: Trust / Social Proof Bar */}
+      <main>
+        {/* Section 1: Interactive Hero — Founder/Consultant Toggle */}
+        <HeroToggle />
+
+        {/* Section 2: Trust Bar */}
         <TrustBar
           metrics={[
             "60M+ MSMEs Need Digitization",
@@ -32,44 +27,10 @@ export default function HomePage() {
           ]}
         />
 
-        {/* Section 3: Features Grid (bordered cards) */}
-        <FeaturesGrid
-          title="Everything You Need to Ship"
-          features={[
-            {
-              icon: "zap",
-              title: "Startup Spawner",
-              description: "Generate landing pages, waitlists, and client portals with one click. Database-driven, not hard-coded.",
-            },
-            {
-              icon: "shield",
-              title: "16 Executive Components",
-              description: "Invoice previews, appointment booking, document vaults, payment status cards — all production-ready.",
-            },
-            {
-              icon: "chart",
-              title: "Razorpay + UPI",
-              description: "Order-based payments, UPI QR codes on desktop, UPI Intent on mobile. Webhook verification included.",
-            },
-            {
-              icon: "zap",
-              title: "GST Invoicing Engine",
-              description: "Auto-splits CGST/SGST vs IGST based on place of supply. All 21 mandatory fields. GSTIN validation.",
-            },
-            {
-              icon: "shield",
-              title: "WhatsApp + Email",
-              description: "Meta Cloud API integration with retry logic. Resend-compatible HTML email templates. Notification queues.",
-            },
-            {
-              icon: "chart",
-              title: "Multi-Tenant RLS",
-              description: "Strict row-level security. Each org is isolated. Clients see only their data. Zero data leakage by design.",
-            },
-          ]}
-        />
+        {/* Section 3: 4-Brand Showcase + Bento Features Grid */}
+        <BrandsShowcase />
 
-        {/* Section 4: Code Preview / Product Demo (dark mode) */}
+        {/* Section 4: Code Preview / Product Demo */}
         <CodePreview
           title="See What You're Getting"
           subtitle="A complete, production-grade codebase — not a tutorial project. Clone it, configure your .env, and deploy."
@@ -100,7 +61,7 @@ export default function HomePage() {
           ]}
         />
 
-        {/* Section 6: Pricing — One-time, not subscription */}
+        {/* Section 6: Pricing */}
         <div id="pricing">
           <PricingTable
             title="One Price. Lifetime Access. No Subscriptions."
@@ -177,25 +138,44 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             <div>
-              <span className="prx-wordmark text-xl text-black">PRX STARTUP OS</span>
-              <p className="text-sm text-gray-400 mt-2">Executive-grade infrastructure for Indian founders.</p>
+              <span
+                className="text-xl font-black text-black tracking-tighter"
+                style={{ fontFamily: "Montserrat, sans-serif", letterSpacing: "-0.05em" }}
+              >
+                PRX STARTUP OS
+              </span>
+              <p className="text-sm text-gray-400 mt-2" style={{ fontFamily: "Inter, sans-serif" }}>
+                Executive-grade infrastructure for Indian founders.
+              </p>
             </div>
             <div className="flex gap-8">
               <div className="flex flex-col gap-2">
-                <p className="text-xs font-bold text-black uppercase tracking-widest mb-2" style={{ fontFamily: "Montserrat, sans-serif" }}>Platform</p>
-                <Link href="/login" className="text-sm text-gray-500 hover:text-black transition-colors">Login</Link>
-                <Link href="/register" className="text-sm text-gray-500 hover:text-black transition-colors">Register</Link>
-                <Link href="/dashboard" className="text-sm text-gray-500 hover:text-black transition-colors">Dashboard</Link>
+                <p
+                  className="text-xs font-bold text-black uppercase tracking-widest mb-2"
+                  style={{ fontFamily: "Montserrat, sans-serif" }}
+                >
+                  Platform
+                </p>
+                <Link href="/login" className="text-sm text-gray-500 hover:text-black transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Login</Link>
+                <Link href="/register" className="text-sm text-gray-500 hover:text-black transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Register</Link>
+                <Link href="/dashboard" className="text-sm text-gray-500 hover:text-black transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Dashboard</Link>
               </div>
               <div className="flex flex-col gap-2">
-                <p className="text-xs font-bold text-black uppercase tracking-widest mb-2" style={{ fontFamily: "Montserrat, sans-serif" }}>Legal</p>
-                <Link href="/privacy" className="text-sm text-gray-500 hover:text-black transition-colors">Privacy</Link>
-                <Link href="/terms" className="text-sm text-gray-500 hover:text-black transition-colors">Terms</Link>
+                <p
+                  className="text-xs font-bold text-black uppercase tracking-widest mb-2"
+                  style={{ fontFamily: "Montserrat, sans-serif" }}
+                >
+                  Legal
+                </p>
+                <Link href="/privacy" className="text-sm text-gray-500 hover:text-black transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Privacy</Link>
+                <Link href="/terms" className="text-sm text-gray-500 hover:text-black transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Terms</Link>
               </div>
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-gray-100 flex justify-between items-center">
-            <p className="text-xs text-gray-400">© {new Date().getFullYear()} PRX Startup OS. Built by PRX.</p>
+            <p className="text-xs text-gray-400" style={{ fontFamily: "Inter, sans-serif" }}>
+              © {new Date().getFullYear()} PRX Startup OS. Built by PRX.
+            </p>
           </div>
         </div>
       </footer>
