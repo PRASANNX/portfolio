@@ -1,5 +1,5 @@
-import { Sidebar } from "./sidebar";
-import { Header } from "./header";
+import { Sidebar } from "@/components/dashboard/Sidebar";
+import { Header } from "@/components/header";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -9,11 +9,11 @@ interface DashboardShellProps {
 
 export function DashboardShell({ children, title, actions }: DashboardShellProps) {
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-white">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         <Header title={title} actions={actions} />
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 bg-[#FAFAFA]">
           {children}
         </main>
       </div>
