@@ -3,6 +3,7 @@ import { Command } from 'commander';
 import { intro, text, isCancel, cancel, spinner, outro } from '@clack/prompts';
 import fs from 'fs/promises';
 import { linkSupabase, pushMigrations } from './supabase.js';
+import { linkVercel } from './vercel.js';
 
 const program = new Command();
 
@@ -43,6 +44,23 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
 # Update secret keys manually in Vercel dashboard
 `;
     await fs.writeFile('.env.local', envContent);
+
+    const vercelToken = await text({
+      message: 'Enter your Vercel Access Token (optional, press enter to skip):',
+      placeholder: '...',
+    });
+
+    if (!isCancel(vercelToken) && vercelToken) {
+      const vSpinner = spinner();
+      vSpinner.start('Linking Vercel project...');
+      try {
+        await linkVercel(vercelToken as string);
+        vSpinner.stop('✔ Vercel project linked successfully.');
+      } catch (error: any) {
+        vSpinner.stop('✖ Vercel linking failed. You can do this later.');
+        console.error(error?.message || error);
+      }
+    }
 
     outro('✅ PRX OS is ready. Start building.');
   });

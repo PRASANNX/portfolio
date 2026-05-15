@@ -45,7 +45,7 @@ export default async function OrgLayout({ children, params }: OrgLayoutProps) {
 
   const { data: org } = await supabase
     .from("organizations")
-    .select("id, name, slug, accent_color, is_active")
+    .select("id, name, slug, accent_color, brand_archetype, is_active")
     .eq("slug", orgSlug)
     .eq("is_active", true)
     .single();
@@ -55,7 +55,10 @@ export default async function OrgLayout({ children, params }: OrgLayoutProps) {
   }
 
   return (
-    <ThemeWrapper accentColor={org.accent_color || "#FF5F1F"}>
+    <ThemeWrapper
+      accentColor={org.accent_color || "#FF5F1F"}
+      archetype={org.brand_archetype || "Outlaw"}
+    >
       {children}
     </ThemeWrapper>
   );

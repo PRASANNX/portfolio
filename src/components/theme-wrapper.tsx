@@ -1,18 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-
-interface ThemeWrapperProps {
-  accentColor: string;
-  children: React.ReactNode;
-}
-
-/**
- * Injects org-specific accent color CSS variables into the DOM.
- * Wraps any page that needs dynamic theming (public landing pages, portals).
- */
-// src/components/theme-wrapper.tsx
-import { useEffect } from "react";
 import { BrandArchetype, getCSSVariablesForArchetype } from "@/lib/brand-psychology";
 
 interface ThemeWrapperProps {
@@ -21,6 +9,10 @@ interface ThemeWrapperProps {
   children: React.ReactNode;
 }
 
+/**
+ * Injects org-specific accent color and archetype CSS variables into the DOM.
+ * Wraps any page that needs dynamic theming (public landing pages, portals).
+ */
 export function ThemeWrapper({ accentColor, archetype = 'Outlaw', children }: ThemeWrapperProps) {
   useEffect(() => {
     const root = document.documentElement;
@@ -34,7 +26,7 @@ export function ThemeWrapper({ accentColor, archetype = 'Outlaw', children }: Th
     // Override accent if provided specifically (backward compatibility or manual tweak)
     if (accentColor) {
       root.style.setProperty("--accent", accentColor);
-      
+
       const darken = (hex: string, amount: number) => {
         try {
           const num = parseInt(hex.replace("#", ""), 16);
@@ -55,9 +47,6 @@ export function ThemeWrapper({ accentColor, archetype = 'Outlaw', children }: Th
       // Reset is handled by the next ThemeWrapper or default styles
     };
   }, [accentColor, archetype]);
-
-  return <>{children}</>;
-}
 
   return <>{children}</>;
 }

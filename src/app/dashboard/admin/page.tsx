@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ViralHookGenerator } from "@/components/executive/ViralHookGenerator";
 import { CopywritingCoPilot } from "@/components/dashboard/cms/CopywritingCoPilot";
+import { ComplianceGenerator } from "@/components/executive/ComplianceGenerator";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -111,14 +112,29 @@ export default async function AdminPage() {
       </div>
 
       {/* Content Engine */}
-      <div className="mt-10">
-        <h2 className="text-sm font-bold text-black uppercase tracking-widest mb-4" style={{ fontFamily: "Montserrat, sans-serif" }}>
-          Content Engine
-        </h2>
-        <div className="space-y-6">
-          <ViralHookGenerator />
-          <CopywritingCoPilot onSave={(copy) => console.log('Compiled copy:', copy)} />
-        </div>
+      <div className="mt-12 space-y-12">
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <h2 className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]" style={{ fontFamily: "Montserrat, sans-serif" }}>
+              Content Engine
+            </h2>
+            <div className="h-px bg-gray-100 flex-1" />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ViralHookGenerator />
+            <CopywritingCoPilot onSave={(copy) => console.log('Compiled copy:', copy)} />
+          </div>
+        </section>
+
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <h2 className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]" style={{ fontFamily: "Montserrat, sans-serif" }}>
+              Legal & Compliance
+            </h2>
+            <div className="h-px bg-gray-100 flex-1" />
+          </div>
+          <ComplianceGenerator />
+        </section>
       </div>
     </div>
   );
