@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Header } from "@/components/header";
-import { HeroToggle } from "@/components/executive/HeroToggle";
-import { BrandsShowcase } from "@/components/executive/BrandsShowcase";
+import { HeroSection } from "@/components/landing/HeroSection";
+import { SubBrandShowcase } from "@/components/landing/SubBrandShowcase";
+import { ConsultantBento } from "@/components/landing/ConsultantBento";
 import { TrustBar } from "@/components/executive/TrustBar";
 import { CodePreview } from "@/components/executive/CodePreview";
 import { PricingTable } from "@/components/executive/PricingTable";
@@ -14,10 +15,10 @@ export default function HomePage() {
       <Header />
 
       <main>
-        {/* Section 1: Interactive Hero — Founder/Consultant Toggle */}
-        <HeroToggle />
+        {/* 1 — Interactive Hero (Founder / Consultant Toggle) */}
+        <HeroSection />
 
-        {/* Section 2: Trust Bar */}
+        {/* 2 — Trust Bar */}
         <TrustBar
           metrics={[
             "60M+ MSMEs Need Digitization",
@@ -27,16 +28,19 @@ export default function HomePage() {
           ]}
         />
 
-        {/* Section 3: 4-Brand Showcase + Bento Features Grid */}
-        <BrandsShowcase />
+        {/* 3 — Proof of Concept: 4 Brands, 1 Engine */}
+        <SubBrandShowcase />
 
-        {/* Section 4: Code Preview / Product Demo */}
+        {/* 4 — Jarvis for Consultants: Dark Bento Grid */}
+        <ConsultantBento />
+
+        {/* 5 — Code Preview / Product Demo */}
         <CodePreview
           title="See What You're Getting"
           subtitle="A complete, production-grade codebase — not a tutorial project. Clone it, configure your .env, and deploy."
         />
 
-        {/* Section 5: Social Proof */}
+        {/* 6 — Social Proof */}
         <TestimonialBlock
           title="Trusted by Founders"
           testimonials={[
@@ -61,7 +65,7 @@ export default function HomePage() {
           ]}
         />
 
-        {/* Section 6: Pricing */}
+        {/* 7 — Pricing */}
         <div id="pricing">
           <PricingTable
             title="One Price. Lifetime Access. No Subscriptions."
@@ -103,7 +107,7 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Section 7: FAQ */}
+        {/* 8 — FAQ */}
         <div id="faq">
           <FAQAccordion
             title="Frequently Asked Questions"
@@ -138,42 +142,33 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             <div>
-              <span
-                className="text-xl font-black text-black tracking-tighter"
-                style={{ fontFamily: "Montserrat, sans-serif", letterSpacing: "-0.05em" }}
-              >
+              <span className="font-['Montserrat'] text-xl font-black text-black tracking-tighter">
                 PRX STARTUP OS
               </span>
-              <p className="text-sm text-gray-400 mt-2" style={{ fontFamily: "Inter, sans-serif" }}>
+              <p className="font-['Inter'] text-sm text-gray-400 mt-2">
                 Executive-grade infrastructure for Indian founders.
               </p>
             </div>
             <div className="flex gap-8">
               <div className="flex flex-col gap-2">
-                <p
-                  className="text-xs font-bold text-black uppercase tracking-widest mb-2"
-                  style={{ fontFamily: "Montserrat, sans-serif" }}
-                >
+                <p className="font-['Montserrat'] text-xs font-bold text-black uppercase tracking-widest mb-2">
                   Platform
                 </p>
-                <Link href="/login" className="text-sm text-gray-500 hover:text-black transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Login</Link>
-                <Link href="/register" className="text-sm text-gray-500 hover:text-black transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Register</Link>
-                <Link href="/dashboard" className="text-sm text-gray-500 hover:text-black transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Dashboard</Link>
+                <Link href="/login" className="font-['Inter'] text-sm text-gray-500 hover:text-black transition-colors">Login</Link>
+                <Link href="/register" className="font-['Inter'] text-sm text-gray-500 hover:text-black transition-colors">Register</Link>
+                <Link href="/dashboard" className="font-['Inter'] text-sm text-gray-500 hover:text-black transition-colors">Dashboard</Link>
               </div>
               <div className="flex flex-col gap-2">
-                <p
-                  className="text-xs font-bold text-black uppercase tracking-widest mb-2"
-                  style={{ fontFamily: "Montserrat, sans-serif" }}
-                >
+                <p className="font-['Montserrat'] text-xs font-bold text-black uppercase tracking-widest mb-2">
                   Legal
                 </p>
-                <Link href="/privacy" className="text-sm text-gray-500 hover:text-black transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Privacy</Link>
-                <Link href="/terms" className="text-sm text-gray-500 hover:text-black transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Terms</Link>
+                <Link href="/privacy" className="font-['Inter'] text-sm text-gray-500 hover:text-black transition-colors">Privacy</Link>
+                <Link href="/terms" className="font-['Inter'] text-sm text-gray-500 hover:text-black transition-colors">Terms</Link>
               </div>
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-gray-100 flex justify-between items-center">
-            <p className="text-xs text-gray-400" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="font-['Inter'] text-xs text-gray-400">
               © {new Date().getFullYear()} PRX Startup OS. Built by PRX.
             </p>
           </div>
