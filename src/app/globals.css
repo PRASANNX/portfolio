@@ -250,4 +250,28 @@
     font-weight: 900;
     letter-spacing: -0.04em;
   }
+
+  /* Interactive Hero Custom Background */
+  .hero-grid-bg {
+    background: linear-gradient(
+        to bottom,
+        #ffffff 0%,
+        #ffffff 40%,
+        rgba(255, 255, 255, 0) 100%
+      ),
+      linear-gradient(to right, #0ed2da, #5f29c7);
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+@keyframes sparkle-pulse {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2) rotate(45deg);
+  }
 }

@@ -20,8 +20,8 @@ export function HeroSection() {
   const c = CONTENT[mode];
 
   return (
-    <section className="pt-28 pb-24 px-4 sm:px-6 bg-white border-b border-gray-200">
-      <div className="max-w-5xl mx-auto text-center">
+    <section className="hero-grid-bg pt-28 pb-24 px-4 sm:px-6 border-b border-gray-200">
+      <div className="max-w-5xl mx-auto text-center relative z-10">
         {/* Toggle */}
         <div className="inline-flex p-1 border border-gray-200 rounded-md mb-12">
           {(["founders", "consultants"] as const).map((m) => (
