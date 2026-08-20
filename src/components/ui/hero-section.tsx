@@ -1,14 +1,26 @@
 "use client";
 
-import React from "react";
-import Spline from '@splinetool/react-spline';
+import React, { useEffect, useState } from "react";
+import Script from "next/script";
 import { CloudShader } from "@/components/ui/cloud-shader";
-import { Chrome3DText } from "@/components/ui/chrome-3d-text";
 import { StickerSwarm } from "@/components/ui/sticker-swarm";
 
 export function HeroSection() {
+  const [domLoaded, setDomLoaded] = useState(false);
+
+  useEffect(() => {
+    setDomLoaded(true);
+  }, []);
+
   return (
     <section className="hero-grid-bg min-h-screen w-full flex flex-col items-center justify-center relative px-6 overflow-hidden">
+      {/* Load Spline viewer script tag */}
+      <Script 
+        type="module" 
+        src="https://cdn.spline.design/@splinetool/viewer@2.0.0/build/spline-viewer.js"
+        strategy="afterInteractive"
+      />
+
       {/* Cloud shader layer */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <CloudShader className="h-full w-full" count={5} speed={0.8} />
@@ -52,7 +64,9 @@ export function HeroSection() {
 
       {/* Center Spline 3D Asset */}
       <div className="relative z-10 w-full h-[600px] flex items-center justify-center pointer-events-auto">
-        <Spline scene="https://prod.spline.design/dqcnXZ2JX9IJwVXx/scene.splinecode" />
+        {domLoaded && React.createElement("spline-viewer", {
+          url: "https://prod.spline.design/dqcnXZ2JX9IJwVXx/scene.splinecode"
+        })}
       </div>
     </section>
   );
