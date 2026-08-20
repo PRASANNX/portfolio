@@ -2,8 +2,18 @@
 
 import React, { useEffect, useState } from "react";
 import Script from "next/script";
-import { CloudShader } from "@/components/ui/cloud-shader";
-import { StickerSwarm } from "@/components/ui/sticker-swarm";
+import dynamic from "next/dynamic";
+import { Chrome3DText } from "@/components/ui/chrome-3d-text";
+
+const CloudShader = dynamic(
+  () => import("@/components/ui/cloud-shader").then((mod) => mod.CloudShader),
+  { ssr: false }
+);
+
+const StickerSwarm = dynamic(
+  () => import("@/components/ui/sticker-swarm").then((mod) => mod.StickerSwarm),
+  { ssr: false }
+);
 
 export function HeroSection() {
   const [domLoaded, setDomLoaded] = useState(false);
@@ -62,8 +72,13 @@ export function HeroSection() {
         </span>
       </div>
 
+      {/* Center 3D Text (PRX) */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+        <Chrome3DText text="PRX" />
+      </div>
+
       {/* Center Spline 3D Asset */}
-      <div className="relative z-10 w-full h-[600px] flex items-center justify-center pointer-events-auto">
+      <div className="relative z-20 w-full h-[600px] flex items-center justify-center pointer-events-auto">
         {domLoaded && React.createElement("spline-viewer", {
           url: "https://prod.spline.design/dqcnXZ2JX9IJwVXx/scene.splinecode"
         })}
